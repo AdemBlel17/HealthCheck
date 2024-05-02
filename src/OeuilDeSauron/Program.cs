@@ -38,6 +38,8 @@ using System.Net;
 using OeuilDeSauron.Data;
 using System.Configuration;
 using OeuilDeSauron.Domain.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Identity.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 var supportedCultures = new List<CultureInfo> { new("fr-FR") };
@@ -53,6 +55,20 @@ builder.Host.UseSerilog((context, configuration) =>
 // Application Insights
 builder.Services.AddApplicationInsightsTelemetry();
 builder.Services.AddApplicationInsightsTelemetryProcessor<ExcludeRequestTelemetryProcessor>();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddMicrosoftIdentityWebApi(options =>
+        {
+            builder.Configuration.Bind("AzureAd", options);
+            options.TokenValidationParameters.NameClaimType = "name";
+        }, options => { builder.Configuration.Bind("AzureAd", options); });
+
+builder.Services.AddAuthorization(config =>
+{
+    config.AddPolicy("AuthZPolicy", policyBuilder =>
+        policyBuilder.Requirements.Add(new ScopeAuthorizationRequirement() { RequiredScopesConfigurationKey = $"AzureAd:Scopes" }));
+});
+
 
 // Mini Profiler
 builder.Services.AddMiniProfiler(options =>
