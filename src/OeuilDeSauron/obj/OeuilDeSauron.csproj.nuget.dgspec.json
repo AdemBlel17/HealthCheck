@@ -592,6 +592,10 @@
               "target": "Package",
               "version": "[2.18.1, )"
             },
+            "Microsoft.Owin.Security.OpenIdConnect": {
+              "target": "Package",
+              "version": "[4.2.2, )"
+            },
             "MiniProfiler.AspNetCore.Mvc": {
               "target": "Package",
               "version": "[4.3.8, )"
@@ -631,6 +635,10 @@
             "Serilog.Sinks.Console": {
               "target": "Package",
               "version": "[5.0.1, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[6.5.0, )"
             }
           },
           "imports": [
